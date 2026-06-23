@@ -40,7 +40,7 @@ export default function MovementRegisterBox() {
   const { items, movements, registerEntry, registerExit } = useInventoryContext();
   const { addToast } = useToastContext();
 
-  const [tipo, setTipo] = useState('saida');
+  const [tipo, setTipo] = useState(null);
   const [itemId, setItemId] = useState('');
   const [quantidade, setQuantidade] = useState('1');
   const [observacao, setObservacao] = useState('');
@@ -103,7 +103,7 @@ export default function MovementRegisterBox() {
         subtitle="Entrada e saída de itens do estoque"
       />
 
-      <div className="mb-5 flex gap-2">
+      <div className={cn('flex gap-2', tipo && 'mb-5')}>
         {TYPE_ORDER.map((key) => {
           const cfg = TYPES[key];
           const Icon = cfg.icon;
@@ -129,6 +129,7 @@ export default function MovementRegisterBox() {
         })}
       </div>
 
+      {tipo && (
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
           <ItemSelect
@@ -212,8 +213,9 @@ export default function MovementRegisterBox() {
           Registrar {TYPES[tipo].label}
         </Button>
       </form>
+      )}
 
-      <div className="mt-6 border-t border-mercure-border pt-5">
+      <div className={cn('border-t border-mercure-border pt-5', tipo ? 'mt-6' : 'mt-5')}>
         <div className="mb-3 flex items-center gap-2">
           <History className="h-4 w-4 text-mercure-muted" />
           <h4 className="text-sm font-semibold text-mercure-dark">Últimas movimentações</h4>
