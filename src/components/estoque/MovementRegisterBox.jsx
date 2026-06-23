@@ -1,5 +1,5 @@
 import { ArrowDownToLine, ArrowUpFromLine, History } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useInventoryContext } from '../../contexts/InventoryContext';
 import { useToastContext } from '../../contexts/ToastContext';
 import { useUnitContext } from '../../contexts/UnitContext';
@@ -8,6 +8,7 @@ import { cn, formatDate, formatNumber } from '../../utils/helpers';
 import Button from '../ui/Button';
 import Card, { CardHeader } from '../ui/Card';
 import Input from '../ui/Input';
+import Select from '../ui/Select';
 import ItemThumbnail from './ItemThumbnail';
 
 const TYPES = {
@@ -40,6 +41,14 @@ export default function MovementRegisterBox() {
   const [itemId, setItemId] = useState('');
   const [quantidade, setQuantidade] = useState('1');
   const [observacao, setObservacao] = useState('');
+
+  const itemOptions = useMemo(
+    () => items.map((i) => ({
+      value: i.id,
+      label: `${i.nome} — ${formatNumber(i.disponivel)} disp.`,
+    })),
+    [items]
+  );
 
   const selectedItem = items.find((i) => i.id === itemId);
 
@@ -111,77 +120,59 @@ export default function MovementRegisterBox() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <p className="mb-3 text-sm font-medium text-mercure-dark">Selecione o item</p>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-            {items.map((item) => {
-              const isSelected = itemId === item.id;
-              return (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => setItemId(item.id)}
-                  className={cn(
-                    'flex flex-col items-center rounded-xl border p-3 transition',
-                    isSelected
-                      ? 'border-mercure-gold bg-mercure-gold/5 ring-2 ring-mercure-gold/30'
-                      : 'border-mercure-border bg-white hover:border-mercure-gold/40 hover:bg-mercure-surface'
-                  )}
-                >
-                  <ItemThumbnail
-                    src={item.imagem ?? getItemImage(item.nome)}
-                    alt={item.nome}
-                    size="lg"
-                  />
-                  <p className="mt-2 text-center text-xs font-semibold text-mercure-dark">{item.nome}</p>
-                  <p className="text-center text-[10px] text-mercure-muted">
-                    {formatNumber(item.disponivel)} disp.
-                  </p>
-                </button>
-              );
-            })}
-          </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Select
+            label="Selecione o item"
+            options={[{ value: '', label: 'Selecione um item...' }, ...itemOptions]}
+            value={itemId}
+            onChange={(e) => setItemId(e.target.value)}
+          />
+          <Input
+            label="Quantidade"
+            type="number"
+            min="1"
+            value={quantidade}
+            onChange={(e) => setQuantidade(e.target.value)}
+            required
+          />
         </div>
-
-        <Input
-          label="Quantidade"
-          type="number"
-          min="1"
-          value={quantidade}
-          onChange={(e) => setQuantidade(e.target.value)}
-          required
-        />
 
         {selectedItem && (
           <div
             className={cn(
-              'flex flex-wrap items-center gap-4 rounded-lg border px-4 py-3 text-sm',
+              'flex flex-col items-center gap-4 rounded-xl border p-5 sm:flex-row sm:items-start',
               TYPES[tipo].bg
             )}
           >
             <ItemThumbnail
-              src={selectedItem.imagem}
+              src={selectedItem.imagem ?? getItemImage(selectedItem.nome)}
               alt={selectedItem.nome}
-              size="md"
+              size="xl"
+              className="shrink-0"
             />
-            <div className="flex flex-wrap items-center gap-4">
-              <div>
-                <span className="text-mercure-muted">Total: </span>
-                <strong>{formatNumber(selectedItem.quantidadeTotal)}</strong>
-              </div>
-              <div>
-                <span className="text-mercure-muted">Disponível: </span>
-                <strong className="text-emerald-700">{formatNumber(selectedItem.disponivel)}</strong>
-              </div>
-              <div>
-                <span className="text-mercure-muted">Danificado: </span>
-                <strong className="text-red-600">{formatNumber(selectedItem.danificado)}</strong>
-              </div>
-              {tipo === 'saida' && (
-                <div className="text-xs text-amber-700">
-                  Máx. saída: {formatNumber(selectedItem.disponivel)} un.
+            <div className="flex-1 text-center sm:text-left">
+              <h4 className="text-lg font-semibold text-mercure-dark">{selectedItem.nome}</h4>
+              <p className="text-sm text-mercure-muted">{selectedItem.categoria}</p>
+              <div className="mt-3 flex flex-wrap justify-center gap-4 sm:justify-start">
+                <div>
+                  <span className="text-xs text-mercure-muted">Total</span>
+                  <p className="font-semibold text-mercure-dark">{formatNumber(selectedItem.quantidadeTotal)}</p>
                 </div>
-              )}
+                <div>
+                  <span className="text-xs text-mercure-muted">Disponível</span>
+                  <p className="font-semibold text-emerald-700">{formatNumber(selectedItem.disponivel)}</p>
+                </div>
+                <div>
+                  <span className="text-xs text-mercure-muted">Danificado</span>
+                  <p className="font-semibold text-red-600">{formatNumber(selectedItem.danificado)}</p>
+                </div>
+                {tipo === 'saida' && (
+                  <div>
+                    <span className="text-xs text-mercure-muted">Máx. saída</span>
+                    <p className="font-semibold text-amber-700">{formatNumber(selectedItem.disponivel)} un.</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
@@ -215,17 +206,18 @@ export default function MovementRegisterBox() {
           <ul className="max-h-52 space-y-2 overflow-y-auto scrollbar-thin">
             {recentMovements.map((mov) => {
               const cfg = TYPES[mov.tipo];
-              const movItem = items.find((i) => i.id === mov.itemId);
               return (
                 <li
                   key={mov.id}
                   className="flex items-center gap-3 rounded-lg bg-mercure-surface px-3 py-2.5 text-sm"
                 >
-                  <ItemThumbnail
-                    src={movItem?.imagem ?? getItemImage(mov.itemNome)}
-                    alt={mov.itemNome}
-                    size="sm"
-                  />
+                  <div className={cn('rounded-lg p-1.5', cfg?.bg)}>
+                    {mov.tipo === 'entrada' ? (
+                      <ArrowDownToLine className={cn('h-3.5 w-3.5', cfg?.color)} />
+                    ) : (
+                      <ArrowUpFromLine className={cn('h-3.5 w-3.5', cfg?.color)} />
+                    )}
+                  </div>
                   <div className="min-w-0 flex-1">
                     <p className="truncate font-medium text-mercure-dark">
                       {cfg?.label} — {mov.itemNome}

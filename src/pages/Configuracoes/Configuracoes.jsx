@@ -34,7 +34,7 @@ export default function Configuracoes() {
           <img
             src={logo}
             alt={APP_NAME}
-            className="mx-auto h-28 w-auto max-w-[200px] object-contain"
+            className="mx-auto h-40 w-auto max-w-[280px] object-contain"
           />
           <h2 className="mt-4 text-xl font-semibold text-mercure-dark">{APP_NAME}</h2>
           <p className="mt-1 text-sm text-mercure-muted">Sistema de Controle de Louças e Utensílios</p>

@@ -28,7 +28,7 @@ export default function Login() {
           <img
             src={logo}
             alt={APP_NAME}
-            className="h-44 w-auto max-w-[240px] object-contain drop-shadow-lg"
+            className="h-64 w-auto max-w-[320px] object-contain drop-shadow-lg"
           />
           <h1 className="mt-10 text-3xl font-bold text-white">{APP_NAME}</h1>
           <p className="mt-3 max-w-md text-white/60">
@@ -48,7 +48,7 @@ export default function Login() {
             <img
               src={logo}
               alt={APP_NAME}
-              className="mx-auto h-32 w-auto max-w-[180px] object-contain"
+              className="mx-auto h-44 w-auto max-w-[280px] object-contain"
             />
             <h1 className="mt-5 text-xl font-bold text-mercure-dark">{APP_NAME}</h1>
           </div>

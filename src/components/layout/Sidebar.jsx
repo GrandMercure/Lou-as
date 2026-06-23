@@ -39,7 +39,7 @@ export default function Sidebar({ isOpen, onClose }) {
             <img
               src={logo}
               alt={APP_NAME}
-              className="h-20 w-auto max-w-[160px] object-contain"
+              className="h-28 w-auto max-w-[220px] object-contain"
             />
             <p className="mt-3 text-sm font-semibold leading-tight text-mercure-gold">Grand Mercure</p>
             <p className="text-xs leading-tight text-white/60">Curitiba Rayon</p>
