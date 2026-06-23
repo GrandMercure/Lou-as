@@ -3,7 +3,6 @@ import ToastContainer from './components/ui/Toast';
 import { AuthProvider } from './contexts/AuthContext';
 import { InventoryProvider } from './contexts/InventoryContext';
 import { ToastProvider } from './contexts/ToastContext';
-import { UnitProvider } from './contexts/UnitContext';
 import AppRoutes from './routes/AppRoutes';
 
 function App() {
@@ -12,14 +11,12 @@ function App() {
   return (
     <BrowserRouter basename={basename}>
       <AuthProvider>
-        <UnitProvider>
-          <InventoryProvider>
-            <ToastProvider>
-              <AppRoutes />
-              <ToastContainer />
-            </ToastProvider>
-          </InventoryProvider>
-        </UnitProvider>
+        <InventoryProvider>
+          <ToastProvider>
+            <AppRoutes />
+            <ToastContainer />
+          </ToastProvider>
+        </InventoryProvider>
       </AuthProvider>
     </BrowserRouter>
   );

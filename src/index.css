@@ -18,17 +18,21 @@
   }
 
   html {
-    @apply scroll-smooth antialiased;
+    @apply scroll-smooth antialiased overflow-x-hidden;
+    max-width: 100%;
   }
 
   body {
-    @apply bg-mercure-surface text-mercure-dark font-sans;
+    @apply bg-mercure-surface text-mercure-dark font-sans overflow-x-hidden;
     margin: 0;
     min-height: 100vh;
+    max-width: 100%;
   }
 
   #root {
     min-height: 100vh;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 }
 

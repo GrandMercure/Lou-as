@@ -32,7 +32,7 @@ export default function Login() {
           />
           <h1 className="mt-10 text-3xl font-bold text-white">{APP_NAME}</h1>
           <p className="mt-3 max-w-md text-white/60">
-            Sistema corporativo de controle de louças, talheres e utensílios para operações hoteleiras de alto padrão.
+            Controle de estoque de louças e utensílios do hotel.
           </p>
         </div>
         <div className="space-y-2">
@@ -83,10 +83,6 @@ export default function Login() {
                 Entrar
               </Button>
             </form>
-
-            <p className="mt-6 text-center text-xs text-mercure-muted">
-              Protótipo MVP · Autenticação simulada via Local Storage
-            </p>
           </div>
         </div>
       </div>

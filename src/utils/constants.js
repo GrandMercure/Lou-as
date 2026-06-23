@@ -8,7 +8,6 @@ export const STORAGE_KEYS = {
   SESSION: 'gm_session',
   INVENTORY: 'gm_inventory',
   INVENTORY_VERSION: 'gm_inventory_version',
-  UNIT: 'gm_selected_unit',
 };
 
 /** Incrementar ao alterar a lista padrão de itens */
@@ -22,13 +21,6 @@ export const CATEGORIES = [
   'Xícaras',
   'Bandejas',
   'Outros',
-];
-
-export const UNITS = [
-  { id: 'rayon', nome: 'Grand Mercure Curitiba Rayon' },
-  { id: 'centro', nome: 'Unidade Centro' },
-  { id: 'aeroporto', nome: 'Unidade Aeroporto' },
-  { id: 'batel', nome: 'Unidade Batel' },
 ];
 
 export const STATUS = {

@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import CategoryFilter from '../../components/estoque/CategoryFilter';
 import InventoryActions from '../../components/estoque/InventoryActions';
 import InventoryTable from '../../components/estoque/InventoryTable';
@@ -10,13 +9,11 @@ import Card, { CardHeader } from '../../components/ui/Card';
 import Input from '../../components/ui/Input';
 import { useInventoryContext } from '../../contexts/InventoryContext';
 import { useToastContext } from '../../contexts/ToastContext';
-import { enrichItem } from '../../utils/inventoryCalculations';
 import { Search } from 'lucide-react';
 
 export default function Estoque() {
-  const { items, addItem, updateItem, markDamaged } = useInventoryContext();
+  const { items, addItem, updateItem } = useInventoryContext();
   const { addToast } = useToastContext();
-  const navigate = useNavigate();
 
   const [category, setCategory] = useState('Todos');
   const [search, setSearch] = useState('');
@@ -55,20 +52,6 @@ export default function Estoque() {
     setFormOpen(true);
   };
 
-  const handleOperation = (action, successMsg, failMsg) => {
-    if (!selectedItem) {
-      addToast('Selecione um item na tabela primeiro.', 'error');
-      return;
-    }
-    const result = action(selectedItem.id, 1);
-    if (result) {
-      addToast(successMsg, 'success');
-      setSelectedItem(enrichItem(result));
-    } else {
-      addToast(failMsg, 'error');
-    }
-  };
-
   return (
     <MainLayout title="Gestão de Estoque" subtitle="Controle de louças e utensílios">
       <Card className="mb-4">
@@ -77,19 +60,12 @@ export default function Estoque() {
           hasSelection={Boolean(selectedItem)}
           onAdd={() => { setEditingItem(null); setFormOpen(true); }}
           onEdit={() => openEdit(selectedItem)}
-          onDamage={() => handleOperation(markDamaged, 'Item marcado como danificado.', 'Quantidade indisponível para marcar como danificado.')}
-          onReport={() => {
-            addToast('Relatório gerado! (simulação)', 'info');
-            // TODO: Exportação PDF / Excel
-            navigate('/relatorios');
-          }}
         />
       </Card>
 
-      <Card>
-        <div className="mb-4 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <CategoryFilter selected={category} onChange={setCategory} />
-          <div className="relative w-full sm:max-w-xs">
+      <Card className="overflow-hidden">
+        <div className="mb-4 space-y-4">
+          <div className="relative w-full">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-mercure-muted" />
             <Input
               placeholder="Buscar item..."
@@ -98,6 +74,7 @@ export default function Estoque() {
               className="pl-9"
             />
           </div>
+          <CategoryFilter selected={category} onChange={setCategory} />
         </div>
 
         <InventoryTable

@@ -1,24 +1,32 @@
 import {
   BarChart3,
   LayoutDashboard,
+  LogOut,
   Package,
-  Settings,
   X,
 } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../../contexts/AuthContext';
 import { APP_NAME } from '../../utils/constants';
 import { cn } from '../../utils/helpers';
-import UnitSelector from './UnitSelector';
 import logo from '../../assets/logo.png';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { to: '/estoque', label: 'Estoque', icon: Package },
   { to: '/relatorios', label: 'Relatórios', icon: BarChart3 },
-  { to: '/configuracoes', label: 'Configurações', icon: Settings },
 ];
 
 export default function Sidebar({ isOpen, onClose }) {
+  const { logout } = useAuthContext();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+    onClose();
+  };
+
   return (
     <>
       {isOpen && (
@@ -53,10 +61,6 @@ export default function Sidebar({ isOpen, onClose }) {
           </button>
         </div>
 
-        <div className="border-b border-white/10 py-4">
-          <UnitSelector />
-        </div>
-
         <nav className="flex-1 space-y-1 overflow-y-auto px-3 py-4 scrollbar-thin">
           {navItems.map(({ to, label, icon: Icon }) => (
             <NavLink
@@ -78,8 +82,15 @@ export default function Sidebar({ isOpen, onClose }) {
           ))}
         </nav>
 
-        <div className="border-t border-white/10 px-5 py-4">
-          <p className="text-[10px] text-white/30">Louças & Utensílios v1.0</p>
+        <div className="border-t border-white/10 px-3 py-4">
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-white/60 transition hover:bg-white/5 hover:text-white"
+          >
+            <LogOut className="h-5 w-5 shrink-0" />
+            Sair
+          </button>
+          <p className="mt-3 px-3 text-[10px] text-white/30">Louças & Utensílios v1.0</p>
         </div>
       </aside>
     </>

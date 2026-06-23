@@ -1,14 +1,16 @@
 import { ArrowDownToLine, ArrowUpFromLine, History } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
+import { FUNCIONARIOS, RESPONSAVEL_PADRAO, getFuncionarioById } from '../../data/mockEmployees';
 import { useInventoryContext } from '../../contexts/InventoryContext';
 import { useToastContext } from '../../contexts/ToastContext';
-import { useUnitContext } from '../../contexts/UnitContext';
+import { APP_NAME } from '../../utils/constants';
 import { getItemImage } from '../../utils/itemImages';
 import { cn, formatDate, formatNumber } from '../../utils/helpers';
 import Button from '../ui/Button';
 import Card, { CardHeader } from '../ui/Card';
 import Input from '../ui/Input';
 import Select from '../ui/Select';
+import ItemSelect from './ItemSelect';
 import ItemThumbnail from './ItemThumbnail';
 
 const TYPES = {
@@ -22,11 +24,13 @@ const TYPES = {
   saida: {
     label: 'Saída',
     icon: ArrowUpFromLine,
-    color: 'text-amber-700',
-    bg: 'bg-amber-50 border-amber-200',
-    activeBtn: 'bg-amber-600 text-white border-amber-600',
+    color: 'text-mercure-navy',
+    bg: 'bg-mercure-gold/10 border-mercure-gold/30',
+    activeBtn: 'bg-mercure-gold text-mercure-navy border-mercure-gold',
   },
 };
+
+const TYPE_ORDER = ['saida', 'entrada'];
 
 /**
  * Box dinâmico de registro de entrada e saída.
@@ -35,20 +39,17 @@ const TYPES = {
 export default function MovementRegisterBox() {
   const { items, movements, registerEntry, registerExit } = useInventoryContext();
   const { addToast } = useToastContext();
-  const { selectedUnit } = useUnitContext();
 
-  const [tipo, setTipo] = useState('entrada');
+  const [tipo, setTipo] = useState('saida');
   const [itemId, setItemId] = useState('');
   const [quantidade, setQuantidade] = useState('1');
   const [observacao, setObservacao] = useState('');
+  const [responsavelId, setResponsavelId] = useState(RESPONSAVEL_PADRAO);
 
-  const itemOptions = useMemo(
-    () => items.map((i) => ({
-      value: i.id,
-      label: `${i.nome} — ${formatNumber(i.disponivel)} disp.`,
-    })),
-    [items]
-  );
+  const responsavelOptions = FUNCIONARIOS.map((f) => ({
+    value: f.id,
+    label: f.cargo ? `${f.nome} — ${f.cargo}` : f.nome,
+  }));
 
   const selectedItem = items.find((i) => i.id === itemId);
 
@@ -65,7 +66,12 @@ export default function MovementRegisterBox() {
       return;
     }
 
-    const meta = { observacao, unidade: selectedUnit.nome };
+    const meta = { observacao, unidade: APP_NAME };
+    if (tipo === 'saida') {
+      const responsavel = getFuncionarioById(responsavelId);
+      meta.responsavelId = responsavel.id;
+      meta.responsavelNome = responsavel.nome;
+    }
     const result =
       tipo === 'entrada'
         ? registerEntry(itemId, qty, meta)
@@ -98,13 +104,17 @@ export default function MovementRegisterBox() {
       />
 
       <div className="mb-5 flex gap-2">
-        {Object.entries(TYPES).map(([key, cfg]) => {
+        {TYPE_ORDER.map((key) => {
+          const cfg = TYPES[key];
           const Icon = cfg.icon;
           return (
             <button
               key={key}
               type="button"
-              onClick={() => setTipo(key)}
+              onClick={() => {
+                setTipo(key);
+                if (key === 'saida') setResponsavelId(RESPONSAVEL_PADRAO);
+              }}
               className={cn(
                 'flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition',
                 tipo === key
@@ -121,11 +131,11 @@ export default function MovementRegisterBox() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Select
+          <ItemSelect
             label="Selecione o item"
-            options={[{ value: '', label: 'Selecione um item...' }, ...itemOptions]}
+            items={items}
             value={itemId}
-            onChange={(e) => setItemId(e.target.value)}
+            onChange={setItemId}
           />
           <Input
             label="Quantidade"
@@ -177,6 +187,15 @@ export default function MovementRegisterBox() {
           </div>
         )}
 
+        {tipo === 'saida' && (
+          <Select
+            label="Quem danificou o item?"
+            options={responsavelOptions}
+            value={responsavelId}
+            onChange={(e) => setResponsavelId(e.target.value)}
+          />
+        )}
+
         <Input
           label="Observação (opcional)"
           value={observacao}
@@ -224,6 +243,7 @@ export default function MovementRegisterBox() {
                     </p>
                     <p className="text-xs text-mercure-muted">
                       {formatDate(mov.data)}
+                      {mov.tipo === 'saida' && mov.responsavelNome && ` · ${mov.responsavelNome}`}
                       {mov.observacao && ` · ${mov.observacao}`}
                     </p>
                   </div>

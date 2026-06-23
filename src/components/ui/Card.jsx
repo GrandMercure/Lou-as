@@ -4,7 +4,7 @@ export default function Card({ children, className, padding = true, ...props }) 
   return (
     <div
       className={cn(
-        'rounded-xl border border-mercure-border bg-white shadow-sm',
+        'min-w-0 max-w-full rounded-xl border border-mercure-border bg-white shadow-sm',
         padding && 'p-5',
         className
       )}

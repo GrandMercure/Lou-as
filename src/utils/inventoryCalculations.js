@@ -33,13 +33,15 @@ export function calculateSummary(items) {
   return items.reduce(
     (acc, item) => {
       const disponivel = getDisponivel(item);
+      const status = getItemStatus({ ...item, disponivel });
       acc.totalItens += item.quantidadeTotal;
       acc.disponivel += disponivel;
       acc.danificado += item.danificado ?? 0;
-      if (getItemStatus({ ...item, disponivel }) === STATUS.BAIXO) acc.baixoEstoque += 1;
+      if (status === STATUS.BAIXO) acc.baixoEstoque += 1;
+      if (status === STATUS.BAIXO || status === STATUS.ATENCAO) acc.itensComAlerta += 1;
       return acc;
     },
-    { totalItens: 0, disponivel: 0, danificado: 0, baixoEstoque: 0 }
+    { totalItens: 0, disponivel: 0, danificado: 0, baixoEstoque: 0, itensComAlerta: 0 }
   );
 }
 

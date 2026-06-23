@@ -64,6 +64,8 @@ export function InventoryProvider({ children }) {
         quantidade: qty,
         observacao: meta.observacao || '',
         unidade: meta.unidade || '',
+        responsavelId: meta.responsavelId || '',
+        responsavelNome: meta.responsavelNome || '',
       });
       refresh();
     }

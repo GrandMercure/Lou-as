@@ -1,6 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthContext } from '../contexts/AuthContext';
-import Configuracoes from '../pages/Configuracoes/Configuracoes';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Estoque from '../pages/Estoque/Estoque';
 import Login from '../pages/Login/Login';
@@ -28,10 +27,6 @@ export default function AppRoutes() {
       <Route
         path="/relatorios"
         element={<ProtectedRoute><Relatorios /></ProtectedRoute>}
-      />
-      <Route
-        path="/configuracoes"
-        element={<ProtectedRoute><Configuracoes /></ProtectedRoute>}
       />
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
     </Routes>
