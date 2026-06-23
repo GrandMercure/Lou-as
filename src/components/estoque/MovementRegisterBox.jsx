@@ -119,7 +119,8 @@ export default function MovementRegisterBox() {
                 'flex flex-1 items-center justify-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium transition',
                 tipo === key
                   ? cfg.activeBtn
-                  : 'border-mercure-border bg-white text-mercure-muted hover:border-mercure-gold/40'
+                  : 'border-mercure-border bg-white text-mercure-muted hover:border-mercure-gold/40',
+                key === 'saida' && tipo !== 'saida' && 'animate-pulse-saida border-mercure-gold/50'
               )}
             >
               <Icon className="h-4 w-4" />
