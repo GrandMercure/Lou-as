@@ -30,7 +30,12 @@ jobs:
           CI: true
 
       - name: SPA fallback for GitHub Pages
-        run: cp dist/index.html dist/404.html
+        run: |
+          cp dist/index.html dist/404.html
+          for route in login dashboard estoque relatorios; do
+            mkdir -p "dist/$route"
+            cp dist/index.html "dist/$route/index.html"
+          done
 
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v4
