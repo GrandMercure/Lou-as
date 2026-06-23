@@ -1,0 +1,47 @@
+[
+  {
+    "id": "1",
+    "nome": "Prato Raso",
+    "categoria": "Pratos",
+    "quantidadeTotal": 120,
+    "danificado": 5,
+    "ultimaAtualizacao": "2026-06-20T14:30:00",
+    "observacoes": "Utilizado em eventos e restaurante principal."
+  },
+  {
+    "id": "2",
+    "nome": "Garfo",
+    "categoria": "Talheres",
+    "quantidadeTotal": 250,
+    "danificado": 5,
+    "ultimaAtualizacao": "2026-06-22T11:00:00",
+    "observacoes": "Inox premium – linha banquete."
+  },
+  {
+    "id": "3",
+    "nome": "Faca",
+    "categoria": "Talheres",
+    "quantidadeTotal": 240,
+    "danificado": 8,
+    "ultimaAtualizacao": "2026-06-22T11:00:00",
+    "observacoes": ""
+  },
+  {
+    "id": "4",
+    "nome": "Colher",
+    "categoria": "Talheres",
+    "quantidadeTotal": 230,
+    "danificado": 5,
+    "ultimaAtualizacao": "2026-06-22T11:00:00",
+    "observacoes": ""
+  },
+  {
+    "id": "5",
+    "nome": "Taça",
+    "categoria": "Copos e Taças",
+    "quantidadeTotal": 90,
+    "danificado": 5,
+    "ultimaAtualizacao": "2026-06-17T20:00:00",
+    "observacoes": "Eventos e salão de festas."
+  }
+]

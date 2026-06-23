@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --color-mercure-gold: #c9a962;
+  --color-mercure-gold-light: #e8d5a3;
+  --color-mercure-navy: #1b2a4a;
+  --color-mercure-navy-light: #2a3f6b;
+  --color-mercure-dark: #111827;
+  --color-mercure-muted: #6b7280;
+  --color-mercure-surface: #f8f9fb;
+  --color-mercure-border: #e5e7eb;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-mercure-border;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-mercure-surface text-mercure-dark font-sans;
+    margin: 0;
+    min-height: 100vh;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+}
+
+@layer utilities {
+  .gold-gradient {
+    background: linear-gradient(135deg, #c9a962 0%, #e8d5a3 50%, #c9a962 100%);
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: #d1d5db transparent;
+  }
+}
